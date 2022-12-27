@@ -86,7 +86,7 @@ class Oyun extends React.Component
 
     handleClick = function ( ind )
     {
-        //if( this.state.oyunBitti ) return;
+        if( this.state.oyunBitti ) return;
 
         const kopyaKareler = this.state.kareler.slice();
 
