@@ -14,17 +14,17 @@ function Kare( props )
 {
     let image = props.image_ilk;
 
-    if( props.value == 'M' )
+    if( props.value === 'M' )
         image = props.image_mayin;
-    else if( props.value == 1 )
+    else if( props.value === 1 )
         image = props.image_sayi1;
-    else if( props.value == 2 )
+    else if( props.value === 2 )
         image = props.image_sayi2;
-    else if( props.value == 3 )
+    else if( props.value === 3 )
         image = props.image_sayi3;
-    else if( props.value == 4 )
+    else if( props.value === 4 )
         image = props.image_sayi4;
-    else if( props.value == 0 )
+    else if( props.value === 0 )
         image = props.image_bos;
 
     return (
@@ -94,8 +94,18 @@ class Oyun extends React.Component
         let oyunBitti = false;
 
         kopyaKareler[ind] = value;
-        if( value == "M" ) // mayınnnnn.
+        if( value === "M" ) // mayınnnnn.
             oyunBitti = true;
+
+        if( value === 0 ) // çevresi boşaltırlamı
+        {
+            const kontrolSayilar = tiklamaBosAlanAc( ind , this.state.mayinlar );
+            if( kontrolSayilar)
+            {
+                for( let fInd = 0 ; fInd < kontrolSayilar.length ; fInd++ )
+                    kopyaKareler[ kontrolSayilar[fInd] ] = this.state.mayinlar[ kontrolSayilar[fInd] ]
+            }
+        }
 
         this.setState({
             kareler: kopyaKareler,
@@ -194,6 +204,53 @@ function mayinDose()
     }
 
     return mayinArr;
+}
+
+function tiklamaBosAlanAc( ind , kopyaKareler )
+{
+    const kontrolSayilar = [];
+    let index = 0;
+
+    if( ind % 10 != 0  ) // en solda olduğu için sol tarafı kontrol edilmeyecek
+    {
+        index = ind-11;
+        if( index >= 0 && kopyaKareler[index] != "M" )
+            kontrolSayilar.push(index);
+
+        index = ind-1;
+        if( index >= 0 && kopyaKareler[index] != "M" )
+            kontrolSayilar.push(index);
+
+        index = ind+9;
+        if( index < 100 && kopyaKareler[index] != "M" )
+            kontrolSayilar.push(index);
+    }
+
+    if( ind % 10 != 9 ) // en sağda olduğu için sağ tarafı kontrol edilmeyecek
+    {
+        index = ind-9;
+        if( index >= 0 && kopyaKareler[index] != "M" )
+            kontrolSayilar.push(index);
+
+        index = ind+1;
+        if( index < 100 && kopyaKareler[index] != "M" )
+            kontrolSayilar.push(index);
+
+        index = ind+11;
+        if( index < 100 && kopyaKareler[index] != "M" )
+            kontrolSayilar.push(index);
+    }
+
+    index = ind-10;
+    if( index >= 0 && kopyaKareler[index] != "M" )
+        kontrolSayilar.push(index);
+
+    index = ind+10;
+    if( index < 100 && kopyaKareler[index] != "M" )
+        kontrolSayilar.push(index);
+
+    return kontrolSayilar;
+
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
