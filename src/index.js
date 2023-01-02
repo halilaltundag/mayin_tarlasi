@@ -81,6 +81,7 @@ class Oyun extends React.Component
             kareler:Array(100).fill(null),
             mayinlar:mayinDose(),
             oyunBitti:false,
+            kazandiniz:false,
         }
     }
 
@@ -92,6 +93,7 @@ class Oyun extends React.Component
 
         let value = this.state.mayinlar[ind];
         let oyunBitti = false;
+        let kazandiniz = false;
 
         kopyaKareler[ind] = value;
         if( value === "M" ) // mayınnnnn.
@@ -107,9 +109,16 @@ class Oyun extends React.Component
             }
         }
 
+        if( oyunTamamlandiMi( kopyaKareler , this.state.mayinlar ) )
+        {
+            oyunBitti = true;
+            kazandiniz = true;
+        }
+
         this.setState({
             kareler: kopyaKareler,
-            oyunBitti: oyunBitti
+            oyunBitti: oyunBitti,
+            kazandiniz:kazandiniz
         })
 
     }
@@ -117,10 +126,16 @@ class Oyun extends React.Component
     render() {
 
         let title = "Oyunumuza Hoş Geldiniz";
-        let durum = "";
+        let durumKaybetti = "";
+        let durumKazandi = "";
 
         if( this.state.oyunBitti )
-            durum = "KAYBETTİNİZ";
+        {
+            if( this.state.kazandiniz )
+                durumKazandi = "KAZANDINIZ";
+            else
+                durumKaybetti = "KAYBETTİNİZ";
+        }
 
         return (
 
@@ -134,7 +149,8 @@ class Oyun extends React.Component
                     </Tahta>
                 </div>
 
-                <div><h3 className="durumClass">{durum}</h3></div>
+                <div><h3 className="durumClass">{durumKaybetti}</h3></div>
+                <div><h3 className="durumClassKazandi">{durumKazandi}</h3></div>
 
             </div>
 
@@ -156,47 +172,47 @@ function mayinDose()
     {
         const rand = parseInt(min + Math.random() * (max - min) );
 
-        if( mayinArr[rand] != "M" ) // indexde mayın yok
+        if( mayinArr[rand] !== "M" ) // indexde mayın yok
         {
             mayinArr[rand] = "M";
 
-            if( rand % 10 != 0  ) // en solda olduğu için sol tarafı kontrol edilmeyecek
+            if( rand % 10 !== 0  ) // en solda olduğu için sol tarafı kontrol edilmeyecek
             {
                 index = rand-11;
-                if( index >= 0 && mayinArr[index] != "M" )
+                if( index >= 0 && mayinArr[index] !== "M" )
                     mayinArr[index]++;
 
                 index = rand-1;
-                if( index >= 0 && mayinArr[index] != "M" )
+                if( index >= 0 && mayinArr[index] !== "M" )
                     mayinArr[index]++;
 
                 index = rand+9;
-                if( index < 100 && mayinArr[index] != "M" )
+                if( index < 100 && mayinArr[index] !== "M" )
                     mayinArr[index]++;
             }
 
-            if( rand % 10 != 9 ) // en sağda olduğu için sağ tarafı kontrol edilmeyecek
+            if( rand % 10 !== 9 ) // en sağda olduğu için sağ tarafı kontrol edilmeyecek
             {
                 index = rand-9;
-                if( index >= 0 && mayinArr[index] != "M" )
+                if( index >= 0 && mayinArr[index] !== "M" )
                     mayinArr[index]++;
 
                 index = rand+1;
-                if( index < 100 && mayinArr[index] != "M" )
+                if( index < 100 && mayinArr[index] !== "M" )
                     mayinArr[index]++;
 
                 index = rand+11;
-                if( index < 100 && mayinArr[index] != "M" )
+                if( index < 100 && mayinArr[index] !== "M" )
                     mayinArr[index]++;
             }
 
 
             index = rand-10;
-            if( index >= 0 && mayinArr[index] != "M" )
+            if( index >= 0 && mayinArr[index] !== "M" )
                 mayinArr[index]++;
 
             index = rand+10;
-            if( index < 100 && mayinArr[index] != "M" )
+            if( index < 100 && mayinArr[index] !== "M" )
                 mayinArr[index]++;
 
         }
@@ -211,46 +227,56 @@ function tiklamaBosAlanAc( ind , kopyaKareler )
     const kontrolSayilar = [];
     let index = 0;
 
-    if( ind % 10 != 0  ) // en solda olduğu için sol tarafı kontrol edilmeyecek
+    if( ind % 10 !== 0  ) // en solda olduğu için sol tarafı kontrol edilmeyecek
     {
         index = ind-11;
-        if( index >= 0 && kopyaKareler[index] != "M" )
+        if( index >= 0 && kopyaKareler[index] !== "M" )
             kontrolSayilar.push(index);
 
         index = ind-1;
-        if( index >= 0 && kopyaKareler[index] != "M" )
+        if( index >= 0 && kopyaKareler[index] !== "M" )
             kontrolSayilar.push(index);
 
         index = ind+9;
-        if( index < 100 && kopyaKareler[index] != "M" )
+        if( index < 100 && kopyaKareler[index] !== "M" )
             kontrolSayilar.push(index);
     }
 
-    if( ind % 10 != 9 ) // en sağda olduğu için sağ tarafı kontrol edilmeyecek
+    if( ind % 10 !== 9 ) // en sağda olduğu için sağ tarafı kontrol edilmeyecek
     {
         index = ind-9;
-        if( index >= 0 && kopyaKareler[index] != "M" )
+        if( index >= 0 && kopyaKareler[index] !== "M" )
             kontrolSayilar.push(index);
 
         index = ind+1;
-        if( index < 100 && kopyaKareler[index] != "M" )
+        if( index < 100 && kopyaKareler[index] !== "M" )
             kontrolSayilar.push(index);
 
         index = ind+11;
-        if( index < 100 && kopyaKareler[index] != "M" )
+        if( index < 100 && kopyaKareler[index] !== "M" )
             kontrolSayilar.push(index);
     }
 
     index = ind-10;
-    if( index >= 0 && kopyaKareler[index] != "M" )
+    if( index >= 0 && kopyaKareler[index] !== "M" )
         kontrolSayilar.push(index);
 
     index = ind+10;
-    if( index < 100 && kopyaKareler[index] != "M" )
+    if( index < 100 && kopyaKareler[index] !== "M" )
         kontrolSayilar.push(index);
 
     return kontrolSayilar;
 
+}
+
+function oyunTamamlandiMi( kopyaKareler , mayinlar )
+{
+    for( let fInd = 0 ; fInd < kopyaKareler.length ; fInd++ )
+    {
+        if( kopyaKareler[fInd] === null &&  mayinlar[fInd] !== 'M' )
+            return false;
+    }
+    return true;
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
