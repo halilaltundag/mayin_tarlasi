@@ -113,6 +113,7 @@ class Oyun extends React.Component
         {
             oyunBitti = true;
             kazandiniz = true;
+            kopyaKareler = this.state.mayinlar;
         }
 
         this.setState({
