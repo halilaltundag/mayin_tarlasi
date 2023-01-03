@@ -105,7 +105,7 @@ class Oyun extends React.Component
             if( kontrolSayilar)
             {
                 for( let fInd = 0 ; fInd < kontrolSayilar.length ; fInd++ )
-                    kopyaKareler[ kontrolSayilar[fInd] ] = this.state.mayinlar[ kontrolSayilar[fInd] ]
+                    kopyaKareler[ kontrolSayilar[fInd] ] = this.state.mayinlar[ kontrolSayilar[fInd] ];
             }
         }
 
@@ -113,7 +113,9 @@ class Oyun extends React.Component
         {
             oyunBitti = true;
             kazandiniz = true;
-            kopyaKareler = this.state.mayinlar;
+            for( let fInd = 0 ; fInd < kopyaKareler.length ; fInd++ )
+                kopyaKareler[ fInd ] = this.state.mayinlar[ fInd ];
+            
         }
 
         this.setState({
